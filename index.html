@@ -1,203 +1,150 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Van de Tuin - Toko Bunga</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Van de Tuin - Galeri Anggrek</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
-    }
     body {
-      font-family: 'Open Sans', sans-serif;
-      background-color: #fff7f8;
-      color: #333;
-      line-height: 1.6;
+      font-family: 'Inter', sans-serif;
     }
-    header {
-      background: #f8e8ea;
-      padding: 2rem;
-      text-align: center;
-      animation: fadeDown 1s ease;
+    .card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    header h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5rem;
-      color: #b23b63;
+    .card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     }
-    .hero {
-      background: url('https://via.placeholder.com/1200x500?text=Foto+Buket+Cantik') center/cover no-repeat;
-      height: 300px;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding-top: 1rem;
-      color: white;
-      text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
-      animation: zoomIn 1.2s ease;
-      margin-bottom: 1rem;
+    .filter-input {
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      border: 1px solid #ccc;
+      outline: none;
+      transition: border 0.2s ease;
     }
-    .hero h2 {
-      font-size: 2.2rem;
-      margin-bottom: 0;
+    .filter-input:focus {
+      border-color: #a855f7;
     }
-    .section {
-      padding: 1rem 1.5rem;
-    }
-    .product {
-      display: flex;
-      flex-wrap: wrap;
-      margin-bottom: 3rem;
-      align-items: center;
-      animation: fadeUp 1s ease;
-    }
-    .product:nth-child(even) {
-      flex-direction: row-reverse;
-    }
-    .product img {
-      width: 100%; max-width: 400px; border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    }
-    .product-content {
-      flex: 1;
-      padding: 1rem 2rem;
-    }
-    .product-content h3 {
-      font-size: 1.5rem;
-      color: #b23b63;
-    }
-    .cta {
-      text-align: center;
-      padding: 2rem;
-    }
-    .cta a {
-      display: inline-block;
-      background: #b23b63;
-      color: white;
-      padding: 1rem 2rem;
-      border-radius: 30px;
-      text-decoration: none;
-      font-size: 1.2rem;
-      transition: background 0.3s ease;
-      animation: bounceIn 1.2s ease;
-    }
-    .cta a:hover {
-      background: #8e2c4b;
-    }
-    footer {
-      text-align: center;
-      padding: 1rem;
-      background: #f8e8ea;
-      color: #555;
-      font-size: 0.9rem;
-    }
-    @keyframes fadeDown {
-      from {opacity: 0; transform: translateY(-20px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-    @keyframes fadeUp {
-      from {opacity: 0; transform: translateY(30px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-    @keyframes zoomIn {
-      from {transform: scale(0.95); opacity: 0;}
-      to {transform: scale(1); opacity: 1;}
-    }
-    @keyframes bounceIn {
-      0% {transform: scale(0.9); opacity: 0;}
-      60% {transform: scale(1.05); opacity: 1;}
-      100% {transform: scale(1);}
-    }
-    @media (max-width: 768px) {
-      .product {
-        flex-direction: column !important;
-      }
-      .product-content {
-        padding: 1rem 0;
-      }
+    #cartModal {
+      transition: opacity 0.3s ease;
     }
   </style>
 </head>
-<body>
-  <header>
-    <h1>Van de Tuin</h1>
+<body class="min-h-screen bg-gradient-to-r from-purple-200 via-pink-100 to-white p-6">
+  <header class="flex justify-between items-center py-6">
+    <h1 class="text-4xl font-bold text-purple-800 flex items-center gap-2">
+      🌸 Van de Tuin
+    </h1>
+    <button onclick="toggleCart()" class="flex gap-2 bg-purple-600 text-white px-4 py-2 rounded-xl hover:bg-purple-700">
+      🛒 Keranjang <span id="cartCount" class="ml-1 font-bold">(0)</span>
+    </button>
   </header>
 
-  <section class="hero">
-    <h2>Bunga Segar, Siap Antar Hari Ini!</h2>
+  <section class="text-center mb-8">
+    <h2 class="text-3xl md:text-5xl font-semibold text-purple-700 mb-4">
+      Jelajahi Keindahan Anggrek Hidup
+    </h2>
+    <p class="text-lg text-gray-700 mb-6">
+      Tanaman anggrek pilihan langsung dari kebun kami, segar dan siap menghiasi rumah Anda.
+    </p>
+    <input type="text" id="filterInput" placeholder="Cari anggrek..." class="filter-input" onkeyup="filterItems()">
   </section>
 
-  <section class="section">
-    <div class="product">
-      <img src="bulan.jpg" alt="Buket A">
-      <div class="product-content">
-        <h3>1. Anggrek Bulan (Phalaenopsis amabilis)</h3>
-        <p>Anggrek bulan adalah anggrek nasional Indonesia yang sangat populer. Cirinya adalah bunga besar dan lebar, umumnya berwarna putih bersih dengan bagian tengah berwarna kuning lembut, meskipun ada juga varietas lain dengan warna pink, ungu, atau corak lainnya. Anggrek ini dikenal karena kemudahan perawatannya dan kemampuan mekarnya yang tahan lama, seringkali bisa berbunga sepanjang tahun. Anggrek bulan termasuk jenis anggrek epifit, yang hidup menempel pada pohon lain.</p>
-        <div class="cta">
-          <a href="https://wa.me/6282114188543?text=Halo%20saya%20mau%20beli%20anggreknya">Pesan via WhatsApp</a>
-        </div>
-      </div>
-    </div>
+  <div id="orchidGrid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+  </div>
 
-    <div class="product">
-      <img src="dendrobium.jpg" alt="Buket B">
-      <div class="product-content">
-        <h3>2. Anggrek Dendrobium (Dendrobium spp.)</h3>
-        <p>Anggrek Dendrobium adalah salah satu genus anggrek terbesar dan paling beragam. Bunganya tumbuh berkelompok pada batang panjang dan hadir dalam berbagai warna cerah seperti putih, kuning, ungu, pink, bahkan kombinasi warna. Banyak Dendrobium populer karena daya tarik eksotis dan perawatannya yang relatif mudah, sehingga cocok untuk pemula. Beberapa spesiesnya, seperti Dendrobium crumenatum (anggrek tebu), memiliki bunga putih dengan bibir kuning yang harum.</p>
-        <div class="cta">
-          <a href="https://wa.me/6282114188543?text=Halo%20saya%20mau%20beli%20anggreknya">Pesan via WhatsApp</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="product">
-        <img src="cattleya.jpg" alt="Buket A">
-        <div class="product-content">
-          <h3>3. Anggrek Cattleya (Cattleya spp.)</h3>
-          <p>Anggrek Cattleya dikenal sebagai "ratu anggrek" karena bunga-bunganya yang besar, spektakuler, dan mencolok. Bunganya memiliki bentuk khas dengan bibir bunga (labelum) yang besar dan bergelombang, seringkali dengan warna dan corak yang kontras. Anggrek ini hadir dalam berbagai warna menarik, dari putih, pink, ungu, hingga kuning dan oranye. Cattleya termasuk anggrek epifit yang membutuhkan cahaya cukup namun tidak langsung.</p>
-          <div class="cta">
-            <a href="https://wa.me/6282114188543?text=Halo%20saya%20mau%20beli%20anggreknya">Pesan via WhatsApp</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="product">
-        <img src="vanda.jpg" alt="Buket B">
-        <div class="product-content">
-          <h3>4. Anggrek Vanda (Vanda spp.)</h3>
-          <p>Anggrek Vanda memiliki bentuk daun dan bunga yang bervariasi, ada yang tipis, lebar, menyerupai pita, bahkan pensil. Ciri khasnya adalah bunga-bunganya yang cantik dengan corak unik, seringkali berbintik atau bergaris. Vanda umumnya tumbuh sebagai anggrek epifit, namun ada juga yang terestrial. Anggrek ini menyukai sinar matahari yang cukup dan kelembaban tinggi.</p>
-          <div class="cta">
-            <a href="https://wa.me/6282114188543?text=Halo%20saya%20mau%20beli%20anggreknya">Pesan via WhatsApp</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="product">
-        <img src="hitam.jpg" alt="Buket B">
-        <div class="product-content">
-          <h3>5. Anggrek Hitam (Coelogyne pandurata)</h3>
-          <p>Anggrek hitam adalah spesies anggrek yang berasal dari Kalimantan dan Sumatera. Nama "anggrek hitam" diberikan karena lidah atau bibir bunganya berwarna hitam pekat dengan kelopak hijau tua. Ukuran bunganya cukup besar dan memiliki aroma yang harum. Anggrek ini termasuk jenis anggrek langka dan dilindungi karena habitatnya yang semakin berkurang.</p>
-          <div class="cta">
-            <a href="https://wa.me/6282114188543?text=Halo%20saya%20mau%20beli%20anggreknya">Pesan via WhatsApp</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="product">
-        <img src="tebu.jpg" alt="Buket B">
-        <div class="product-content">
-          <h3>6. Anggrek Tebu (Grammatophyllum speciosum)</h3>
-          <p>Anggrek tebu adalah anggrek terbesar di dunia, baik dari segi ukuran tanaman maupun beratnya, bahkan satu rumpun dewasa bisa mencapai 1 ton dengan tinggi hingga 3 meter. Bunganya berwarna kuning kecoklatan dengan bintik-bintik gelap seperti motif harimau, sehingga sering disebut juga anggrek harimau. Anggrek ini termasuk anggrek epifit yang kokoh dan bunganya bisa bertahan lama.</p>
-          <div class="cta">
-            <a href="https://wa.me/6282114188543?text=Halo%20saya%20mau%20beli%20anggreknya">Pesan via WhatsApp</a>
-          </div>
-        </div>
-      </div>
-  
-  </section>
-
-  <footer>
-    &copy; 2025 van de tuin. Semua hak dilindungi.
+  <footer class="mt-16 text-center text-sm text-gray-500">
+    © 2025 Van de Tuin. All rights reserved.
   </footer>
+
+  <!-- Modal Keranjang -->
+  <div id="cartModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-xl w-full max-w-md">
+      <h3 class="text-xl font-bold mb-4">Keranjang Belanja</h3>
+      <ul id="cartItems" class="mb-4"></ul>
+      <p class="font-bold mb-4">Total: <span id="cartTotal">Rp 0</span></p>
+      <a id="waCheckout" href="#" target="_blank" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl inline-block">Checkout via WhatsApp</a>
+      <button onclick="toggleCart()" class="ml-4 text-gray-500 hover:text-gray-700">Tutup</button>
+    </div>
+  </div>
+
+  <script>
+    const orchids = [
+      { name: 'Anggrek Bulan', price: 120000, image: 'bulan.jpg', desc: 'Bunga eksotis dengan warna putih elegan, cocok untuk dekorasi rumah.' },
+      { name: 'Anggrek Dendrobium', price: 90000, image: 'dendrobium.jpg', desc: 'Jenis anggrek yang mudah dirawat dengan warna mencolok.' },
+      { name: 'Anggrek Hitam', price: 200000, image: 'hitam.jpg', desc: 'Langka dan mewah, bunga berwarna gelap yang memikat.' },
+      { name: 'Anggrek Cattleya', price: 150000, image: 'cattleya.jpg', desc: 'Dikenal sebagai Ratu Anggrek, beraroma harum dan warna cerah.' },
+      { name: 'Anggrek Vanda', price: 130000, image: 'vanda.jpg', desc: 'Memiliki warna cerah dengan pola unik dan tahan lama.' },
+      { name: 'Anggrek Bambu', price: 100000, image: 'bambu.jpg', desc: 'Anggrek lokal yang tumbuh baik di iklim tropis.' },
+      { name: 'Anggrek Tebu', price: 95000, image: 'tebu.jpg', desc: 'Berbentuk ramping seperti batang tebu dengan bunga kecil.' },
+      { name: 'Anggrek Tanah', price: 80000, image: 'tanah.jpg', desc: 'Mudah tumbuh di media tanah, cocok untuk pemula.' },
+      { name: 'Anggrek Macan', price: 170000, image: 'macan.jpg', desc: 'Motif bunga menyerupai kulit macan, sangat unik dan eksotik.' },
+      { name: 'Anggrek Kalajengking', price: 160000, image: 'kalajengking.jpg', desc: 'Bentuk bunga menyerupai kalajengking dengan warna kontras.' },
+    ];
+
+    let cart = [];
+
+    function renderOrchids() {
+      const grid = document.getElementById('orchidGrid');
+      grid.innerHTML = '';
+      orchids.forEach((orchid, index) => {
+        const card = document.createElement('div');
+        card.className = 'card rounded-2xl overflow-hidden bg-white shadow-md';
+        card.setAttribute('data-name', orchid.name.toLowerCase());
+        card.innerHTML = `
+          <img src="${orchid.image}" alt="${orchid.name}" class="w-full h-60 object-cover">
+          <div class="p-4">
+            <h3 class="text-xl font-bold text-purple-800 mb-1">${orchid.name}</h3>
+            <p class="text-sm text-gray-600 mb-2">${orchid.desc}</p>
+            <p class="text-purple-600 font-semibold mb-4">Rp ${orchid.price.toLocaleString()}</p>
+            <button onclick="addToCart(${index})" class="w-full bg-purple-500 hover:bg-purple-600 text-white py-2 rounded-xl">Tambahkan ke Keranjang</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterItems() {
+      const input = document.getElementById('filterInput').value.toLowerCase();
+      const cards = document.querySelectorAll('#orchidGrid .card');
+      cards.forEach(card => {
+        const name = card.getAttribute('data-name');
+        card.style.display = name.includes(input) ? 'block' : 'none';
+      });
+    }
+
+    function addToCart(index) {
+      cart.push(orchids[index]);
+      document.getElementById('cartCount').innerText = `(${cart.length})`;
+    }
+
+    function toggleCart() {
+      const modal = document.getElementById('cartModal');
+      modal.classList.toggle('hidden');
+      renderCart();
+    }
+
+    function renderCart() {
+      const list = document.getElementById('cartItems');
+      const waButton = document.getElementById('waCheckout');
+      list.innerHTML = '';
+      let total = 0;
+      let message = 'Halo, saya ingin memesan anggrek berikut:%0A';
+      cart.forEach(item => {
+        const li = document.createElement('li');
+        li.innerText = `• ${item.name} - Rp ${item.price.toLocaleString()}`;
+        list.appendChild(li);
+        total += item.price;
+        message += `- ${item.name} (Rp ${item.price.toLocaleString()})%0A`;
+      });
+      document.getElementById('cartTotal').innerText = `Rp ${total.toLocaleString()}`;
+      waButton.href = `https://wa.me/6282114188543?text=${message}`;
+    }
+
+    renderOrchids();
+  </script>
 </body>
 </html>
+
